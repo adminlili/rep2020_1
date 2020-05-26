@@ -3,12 +3,14 @@ FROM debian:latest
 MAINTAINER admin_lili
 ENV DEBIAN_FRONTEND=nointeractive
 
-COPY /
 RUN	apt-get update && apt-get upgrade -y && \
 	apt-get install -y dnsmasq && \
-	service dnsmasq restart
-EXPOSE 53/tcp
+	rm -rf /etc/dnsmasq.conf
+#	service dnsmasq restart
+	
+COPY dnsmasq.conf /etc/dnsmasq.conf
+
+EXPOSE 1010/tcp
 # the ability to stop term with Ctrl+C
 STOPSIGNAL SIGTERM
-
-CMD ["/usr/sbin/dnsmasq"]
+CMD ["/usr/sbin/dnsmasq", "--no-daemon"]
